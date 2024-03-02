@@ -3,6 +3,11 @@
     <img width="100%" src="[https://i.stack.imgur.com/RJj4x.png](https://github.com/BlazejKalkowski/ClinicScheduler/blob/main/ClinicSchedulerLogo.jpg)">
 </p>
 
+<div align="center">
+  <img src="[https://github.com/BKki/Clinifdaler/raw/main/ClinicSchedulerLogo.jpg](https://github.com/BlazejKalkowski/ClinicScheduler/blob/main/ClinicSchedulerLogo.jpg)" alt="ClinicScheduler Logo">
+</div>
+
+
 # ClinicScheduler - Your Hassle-Free Appointment Booking Solution
 Welcome to ClinicScheduler, the ultimate solution for hassle-free online appointment scheduling at public healthcare facilities. Say goodbye to long waiting times and endless hours spent on the phone – with ClinicScheduler, booking appointments has never been easier.
 
