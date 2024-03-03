@@ -4,9 +4,9 @@ namespace ClinicScheduler.Interfaces
 {
     public interface IPatientService
     {
-        Task<List<Patient>> GetAllPatients();
-        Task<Doctor> GetPatientByGuid();
-        void UpdatePatient();
-        void DeletePatient();
+        List<Patient> GetAllPatients();
+        Patient GetPatientByGuid(Guid guid);
+        void UpdatePatient(Patient patient,Guid guid);
+        void DeletePatient(Guid guid);
     }
 }

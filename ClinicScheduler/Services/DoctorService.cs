@@ -1,29 +1,45 @@
 ﻿using ClinicScheduler.Interfaces;
 using ClinicScheduler.Models;
+using System;
 
 namespace ClinicScheduler.Services
 {
     public class DoctorService : IDoctorService
     {
-
-        public Task<List<Doctor>> GetAllDoctors()
+        private static List<Doctor> _doctors = new List<Doctor> 
         {
-            throw new NotImplementedException();
+            new Doctor(){Guid = Guid.NewGuid(), Name = "Artur", LastName = "Jablonski", Specialization = "Cardiologist"},
+            new Doctor(){Guid = Guid.NewGuid(), Name = "Jerzy", LastName = "Mineralski", Specialization = "Dermatologist"},
+            new Doctor(){Guid = Guid.NewGuid(), Name = "Natalia", LastName = "Almanska", Specialization = "Pediatrician"},
+        };
+
+        public List<Doctor> GetAllDoctors() => _doctors;
+
+
+        public Doctor GetDoctorByGuid(Guid guid)
+        {
+            var doctor = _doctors.Where(x => x.Guid == guid).FirstOrDefault();
+            return doctor;
         }
 
-        public Task<Doctor> GetDoctorByGuid()
+        public void UpdateDoctor(Doctor doctor, Guid guid)
         {
-            throw new NotImplementedException();
+            var dbDoctor = _doctors.Where(x => x.Guid == guid).FirstOrDefault();
+            if (dbDoctor != null)
+            {
+                dbDoctor.Name = doctor.Name;
+                dbDoctor.LastName = doctor.LastName;
+                dbDoctor.Specialization = doctor.Specialization;
+            }
         }
 
-        public void UpdateDoctor()
+        public void DeleteDoctor(Guid guid)
         {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteDoctor()
-        {
-            throw new NotImplementedException();
+            var dbDoctor = _doctors.Where(x => x.Guid == guid).FirstOrDefault();
+            if (dbDoctor != null)
+            {
+                _doctors.Remove(dbDoctor);
+            }
         }
     }
 }
