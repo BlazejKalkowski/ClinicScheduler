@@ -6,7 +6,7 @@ namespace ClinicScheduler.Models
     public class Visit
     {
         [Required]
-        public int Id { get; set; }
+        public Guid Guid { get; set; }
         [Required]
         public Doctor Doctor { get; set; }
         [Required]
