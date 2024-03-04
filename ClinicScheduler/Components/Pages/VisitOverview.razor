@@ -1,0 +1,50 @@
+﻿@page "/visit"
+@using ClinicScheduler.Interfaces
+@using ClinicScheduler.Models
+@inject IVisitService VisitService
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Visits</PageTitle>
+<h3>Visits</h3>
+
+@if (_visits.Count == 0)
+{
+    <p><em>Loading Visits...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Patient</th>
+                <th>Specialization</th>
+                <th>DateOfVisit</th>
+                <th>PrescriptionNumber</th>
+                <th>IsConfirmed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var visit in _visits)
+            {
+                <tr>
+                    <td>@visit.Doctor.FullName</td>
+                    <td>@visit.Patient.FullName </td>
+                    <td>@visit.Doctor.Specialization </td>
+                    <td>@visit.DateOfVisit</td>
+                    <td>@visit.PrescriptionNumber</td>
+                    <td>@visit.IsConfirmed</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Visit> _visits = new List<Visit>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _visits = await VisitService.GetAllVisitsAsync();
+    }
+}

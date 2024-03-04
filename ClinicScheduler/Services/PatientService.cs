@@ -13,16 +13,22 @@ namespace ClinicScheduler.Services
            new Patient(){Guid = Guid.NewGuid(), Name= "Natalia", LastName = "Mroczkowska", PESEL = "59012001987", DateOfBirth = new DateTime(1959,01,20)},
         };
 
-        public List<Patient> GetAllPatients() => _patients;
-
-        public Patient GetPatientByGuid(Guid guid)
+        public async Task<List<Patient>> GetAllPatientsAsync()
         {
+            await Task.Delay(100);
+            return _patients;
+        }
+
+        public async Task<Patient> GetPatientByGuidAsync(Guid guid)
+        {
+            await Task.Delay(100);
             var patient = _patients.Where(x => x.Guid == guid).FirstOrDefault();
             return patient;
         }
 
-        public void UpdatePatient(Patient patient, Guid guid)
+        public async Task UpdatePatientAsync(Patient patient, Guid guid)
         {
+            await Task.Delay(100);
             var dbPatient = _patients.Where(x => x.Guid == guid).FirstOrDefault();
             if (dbPatient != null)
             {
@@ -33,8 +39,9 @@ namespace ClinicScheduler.Services
             }
         }
 
-        public void DeletePatient(Guid guid)
+        public async Task DeletePatientAsync(Guid guid)
         {
+            await Task.Delay(100);
             var dbPatient = _patients.Where(x => x.Guid == guid).FirstOrDefault();
             if (dbPatient != null)
             {

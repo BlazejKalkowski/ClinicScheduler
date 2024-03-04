@@ -4,9 +4,9 @@ namespace ClinicScheduler.Interfaces
 {
     public interface IDoctorService
     {
-        List<Doctor> GetAllDoctors();
-        Doctor GetDoctorByGuid(Guid guid);
-        void UpdateDoctor(Doctor doctor, Guid guid);
-        void DeleteDoctor(Guid guid);
+        Task<List<Doctor>> GetAllDoctorsAsync();
+        Task<Doctor> GetDoctorByGuidAsync(Guid guid);
+        Task UpdateDoctorAsync(Doctor doctor, Guid guid);
+        Task DeleteDoctorAsync(Guid guid);
     }
 }

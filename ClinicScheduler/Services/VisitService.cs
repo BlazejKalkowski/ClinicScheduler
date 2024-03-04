@@ -24,16 +24,22 @@ namespace ClinicScheduler.Services
         };
 
 
-        public List<Visit> GetAllVisits() => _visits;
-
-        public Visit GetVistByGuid(Guid guid)
+        public async Task<List<Visit>> GetAllVisitsAsync()
         {
+            await Task.Delay(100);
+            return _visits;
+        }
+
+        public async Task<Visit> GetVistByGuidAsync(Guid guid)
+        {
+            await Task.Delay(100);
             var visit = _visits.Where(x => x.Guid == guid).FirstOrDefault();
             return visit;
         }
 
-        public void UpdateVisit(Visit visit, Guid guid)
+        public async Task UpdateVisitAsync(Visit visit, Guid guid)
         {
+            await Task.Delay(100);
             var dbVisit = _visits.Where(x => x.Guid == guid).FirstOrDefault();
             if (dbVisit != null)
             {
@@ -45,8 +51,9 @@ namespace ClinicScheduler.Services
             }
         }
 
-        public void DeleteVisit(Guid guid)
+        public async Task DeleteVisitAsync(Guid guid)
         {
+            await Task.Delay(100);
             var dbVisit = _visits.Where(x => x.Guid == guid).FirstOrDefault();
             if (dbVisit != null)
             {

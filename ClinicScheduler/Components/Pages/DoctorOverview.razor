@@ -1,0 +1,47 @@
+﻿@page "/doctor"
+@using ClinicScheduler.Interfaces
+@using ClinicScheduler.Models
+@inject IDoctorService DoctorService
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Doctors</PageTitle>
+
+<h3>Doctors</h3>
+
+@if (_doctors.Count == 0)
+{
+    <p><em>Loading Doctors...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>LastName</th>
+                <th>Specialization</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doctor in _doctors)
+            {
+                <tr>
+                    <td>@doctor.Name</td>
+                    <td>@doctor.LastName</td>
+                    <td>@doctor.Specialization</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<Doctor> _doctors = new List<Doctor>();
+
+    protected override async Task OnInitializedAsync()
+    {
+         _doctors = await DoctorService.GetAllDoctorsAsync();
+    }
+
+}

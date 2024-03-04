@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicScheduler.Models
 {
@@ -10,6 +11,13 @@ namespace ClinicScheduler.Models
         public string Name { get; set; }
         [Required]
         public string LastName { get; set; }
+
+        [NotMapped]
+        public string FullName
+        {
+            get => $"{Name} {LastName}";
+        }
+
         [Required]
         public string Specialization { get; set; }
     }

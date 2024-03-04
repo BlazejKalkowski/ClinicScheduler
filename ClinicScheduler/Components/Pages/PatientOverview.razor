@@ -1,0 +1,46 @@
+﻿@page "/patient"
+@using ClinicScheduler.Interfaces
+@using ClinicScheduler.Models
+@inject IPatientService PatientService
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Patients</PageTitle>
+<h3>Patients</h3>
+
+@if (_patients.Count == 0)
+{
+    <p><em>Loading Patients</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>LastName</th>
+                <th>PESEL</th>
+                <th>DateOfBirth</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var patient in _patients)
+            {
+                <tr>
+                    <td>@patient.Name</td>
+                    <td>@patient.LastName</td>
+                    <td>@patient.PESEL</td>
+                    <td>@patient.DateOfBirth</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<Patient> _patients = new List<Patient>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _patients = await PatientService.GetAllPatientsAsync();
+    }
+}
