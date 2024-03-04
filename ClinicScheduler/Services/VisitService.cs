@@ -26,19 +26,32 @@ namespace ClinicScheduler.Services
 
         public List<Visit> GetAllVisits() => _visits;
 
-        public Doctor GetVistByGuid(Guid guid)
+        public Visit GetVistByGuid(Guid guid)
         {
-            throw new NotImplementedException();
+            var visit = _visits.Where(x => x.Guid == guid).FirstOrDefault();
+            return visit;
         }
 
         public void UpdateVisit(Visit visit, Guid guid)
         {
-            throw new NotImplementedException();
+            var dbVisit = _visits.Where(x => x.Guid == guid).FirstOrDefault();
+            if (dbVisit != null)
+            {
+                dbVisit.Doctor = visit.Doctor;
+                dbVisit.Patient = visit.Patient;
+                dbVisit.DateOfVisit = visit.DateOfVisit;
+                dbVisit.PrescriptionNumber = visit.PrescriptionNumber;
+                dbVisit.IsConfirmed = visit.IsConfirmed;
+            }
         }
 
         public void DeleteVisit(Guid guid)
         {
-            throw new NotImplementedException();
+            var dbVisit = _visits.Where(x => x.Guid == guid).FirstOrDefault();
+            if (dbVisit != null)
+            {
+                _visits.Remove(dbVisit);
+            }
         }
     }
 }

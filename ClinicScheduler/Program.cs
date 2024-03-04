@@ -1,6 +1,12 @@
 using ClinicScheduler.Components;
+using ClinicScheduler.Interfaces;
+using ClinicScheduler.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IVisitService, VisitService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
