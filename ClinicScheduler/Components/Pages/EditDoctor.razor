@@ -1,0 +1,48 @@
+﻿@page "/edit-doctor"
+@page "/edit-doctor/{id:int}"
+@using ClinicScheduler.Interfaces
+@using ClinicScheduler.Models
+@inject IDoctorService DoctorService
+
+
+@if(Id is null)
+{
+    <PageTitle>Add a New Doctor</PageTitle>
+    <h4>Add a New Doctor</h4>
+}
+else
+{
+    <PageTitle>Edit @CurrentDoctor.FullName</PageTitle>
+    <h4>Edit @CurrentDoctor.FullName</h4>
+}
+
+<EditForm Model="CurrentDoctor" OnSubmit="HandleSubmit">
+    <div>
+
+    </div>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    public Doctor CurrentDoctor { get; set; } = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id is not null)
+        {
+            var doctor = await DoctorService.GetDoctorByIdAsync((int)Id);
+            if (doctor is not null)
+                CurrentDoctor = doctor;
+        }
+
+
+    }
+
+    public void HandleSubmit(Doctor doctor)
+    {
+        
+    }
+}

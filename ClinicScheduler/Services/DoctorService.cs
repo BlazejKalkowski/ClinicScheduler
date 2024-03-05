@@ -8,9 +8,9 @@ namespace ClinicScheduler.Services
     {
         private static List<Doctor> _doctors = new List<Doctor> 
         {
-            new Doctor(){Guid = Guid.NewGuid(), Name = "Artur", LastName = "Jablonski", Specialization = "Cardiologist"},
-            new Doctor(){Guid = Guid.NewGuid(), Name = "Jerzy", LastName = "Mineralski", Specialization = "Dermatologist"},
-            new Doctor(){Guid = Guid.NewGuid(), Name = "Natalia", LastName = "Almanska", Specialization = "Pediatrician"},
+            new Doctor(){Id = 1, Name = "Artur", LastName = "Jablonski", Specialization = "Cardiologist"},
+            new Doctor(){Id = 2, Name = "Jerzy", LastName = "Mineralski", Specialization = "Dermatologist"},
+            new Doctor(){Id = 3, Name = "Natalia", LastName = "Almanska", Specialization = "Pediatrician"},
         };
 
         public async Task<List<Doctor>> GetAllDoctorsAsync() 
@@ -20,17 +20,23 @@ namespace ClinicScheduler.Services
         }
 
 
-        public async Task<Doctor> GetDoctorByGuidAsync(Guid guid)
+        public async Task<Doctor> GetDoctorByIdAsync(int id)
         {
             await Task.Delay(100);
-            var doctor =  _doctors.Where(x => x.Guid == guid).FirstOrDefault();
+            var doctor =  _doctors.Where(x => x.Id == id).FirstOrDefault();
             return doctor;
         }
 
-        public async Task UpdateDoctorAsync(Doctor doctor, Guid guid)
+        public async Task AddDoctorAsync(Doctor doctor)
         {
             await Task.Delay(100);
-            var dbDoctor = _doctors.Where(x => x.Guid == guid).FirstOrDefault();
+            _doctors.Add(doctor);
+        }
+
+        public async Task UpdateDoctorAsync(Doctor doctor, int id)
+        {
+            await Task.Delay(100);
+            var dbDoctor = _doctors.Where(x => x.Id == id).FirstOrDefault();
             if (dbDoctor != null)
             {
                 dbDoctor.Name = doctor.Name;
@@ -39,10 +45,10 @@ namespace ClinicScheduler.Services
             }
         }
 
-        public async Task DeleteDoctorAsync(Guid guid)
+        public async Task DeleteDoctorAsync(int id)
         {
             await Task.Delay(100);
-            var dbDoctor = _doctors.Where(x => x.Guid == guid).FirstOrDefault();
+            var dbDoctor = _doctors.Where(x => x.Id == id).FirstOrDefault();
             if (dbDoctor != null)
             {
                 _doctors.Remove(dbDoctor);

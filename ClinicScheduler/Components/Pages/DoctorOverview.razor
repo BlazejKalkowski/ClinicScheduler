@@ -2,6 +2,7 @@
 @using ClinicScheduler.Interfaces
 @using ClinicScheduler.Models
 @inject IDoctorService DoctorService
+@inject NavigationManager NavigationManager
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 <PageTitle>Doctors</PageTitle>
@@ -20,6 +21,7 @@ else
                 <th>Name</th>
                 <th>LastName</th>
                 <th>Specialization</th>
+                <th>Edit Doctor</th>
             </tr>
         </thead>
         <tbody>
@@ -29,10 +31,13 @@ else
                     <td>@doctor.Name</td>
                     <td>@doctor.LastName</td>
                     <td>@doctor.Specialization</td>
+                    <td><button class="btn btn-primary" @onclick="@(() => EditDoctor(doctor.Id))">Edit</button></td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <button class="btn btn-primary" @onclick="AddDoctor">Add new Doctor</button>
 }
 
 
@@ -41,7 +46,17 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-         _doctors = await DoctorService.GetAllDoctorsAsync();
+        _doctors = await DoctorService.GetAllDoctorsAsync();
+    }
+
+    void AddDoctor()
+    {
+        NavigationManager.NavigateTo($"/edit-doctor");
+    }
+
+    void EditDoctor(int id)
+    {
+        NavigationManager.NavigateTo($"/edit-doctor/{id}");
     }
 
 }

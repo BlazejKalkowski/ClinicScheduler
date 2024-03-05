@@ -5,8 +5,8 @@ namespace ClinicScheduler.Interfaces
     public interface IVisitService
     {
         Task<List<Visit>> GetAllVisitsAsync();
-        Task<Visit> GetVistByGuidAsync(Guid guid);
-        Task UpdateVisitAsync(Visit visit, Guid guid);
-        Task DeleteVisitAsync(Guid guid);
+        Task<Visit> GetVistByIdAsync(int id);
+        Task UpdateVisitAsync(Visit visit, int id);
+        Task DeleteVisitAsync(int id);
     }
 }
