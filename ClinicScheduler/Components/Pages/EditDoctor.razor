@@ -21,15 +21,15 @@ else
 <EditForm Model="CurrentDoctor" OnSubmit="HandleSubmit">
     <div>
         <label for="name">Name</label>
-        <InputText id="name" @bind-Value="CurrentDoctor.Name" class="form-control"></InputText>
+        <InputText id="name" @bind-Value="CurrentDoctor.Name" Placeholder="Name" class="form-control"></InputText>
     </div>
     <div>
         <label for="lastName">Last Name</label>
-        <InputText id="lastName" @bind-Value="CurrentDoctor.LastName" class="form-control"></InputText>
+        <InputText id="lastName" @bind-Value="CurrentDoctor.LastName" Placeholder="Last Name" class="form-control"></InputText>
     </div>
     <div>
         <label for="specialization">Specialization</label>
-        <InputText id="specialization" @bind-Value="CurrentDoctor.Specialization" class="form-control"></InputText>
+        <InputText id="specialization" @bind-Value="CurrentDoctor.Specialization" Placeholder="Specialization" class="form-control"></InputText>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
 </EditForm>

@@ -1,0 +1,61 @@
+@page "/edit-patient"
+@page "/edit-patient/{id:int}"
+@using ClinicScheduler.Interfaces
+@using ClinicScheduler.Models
+
+@inject IPatientService PatientService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+@if (Id is null)
+{
+    <PageTitle>Add a New Patient</PageTitle>
+    <h4>Add a New Patient</h4>
+}
+else
+{
+    <PageTitle>Edit @CurrentPatient.FullName</PageTitle>
+    <h4>Edit @CurrentPatient.FullName</h4>
+}
+
+<EditForm Model="CurrentPatient" OnSubmit="HandleSubmit">
+    <div>
+        <label for="name">Name</label>
+        <InputText id="name" bind-Value="@CurrentPatient.Name" Placeholder="Name" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="lastName">Last Name</label>
+        <InputText id="lastName" bind-Value="@CurrentPatient.LastName" Placeholder="Last Name" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="pesel">PESEL</label>
+        <InputText id="pesel" bind-Value="@CurrentPatient.PESEL" Placeholder="PESEL" class="form-control"></InputText>
+    </div>
+    <div>
+        <label for="dateOfBirth">PESEL</label>
+        <DateInput TValue="DateTime" id="dateOfBirth" bind-Value="@CurrentPatient.DateOfBirth" Placeholder="Enter Date" class="form-control"></DateInput>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+@code {
+    public int? Id { get; set; }
+    public Patient CurrentPatient { get; set; }
+    
+    protected override async Task OnParametersSetAsync()
+    {   
+        if (Id is not null)
+        {
+            var patient = await PatientService.GetPatientByIdAsync((int)Id);
+            if (patient is not null)
+                CurrentPatient = patient;
+
+        }
+    }
+
+    async Task HandleSubmit()
+    {
+        throw new NotImplementedException();
+    }
+
+}
