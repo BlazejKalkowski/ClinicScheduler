@@ -2,6 +2,7 @@
 @using ClinicScheduler.Interfaces
 @using ClinicScheduler.Models
 @inject IPatientService PatientService
+@inject NavigationManager NavigationManager
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 <PageTitle>Patients</PageTitle>
@@ -15,25 +16,31 @@ else
 {
     <table class="table">
         <thead>
-            <tr>
-                <th>Name</th>
-                <th>LastName</th>
-                <th>PESEL</th>
-                <th>DateOfBirth</th>
-            </tr>
+        <tr>
+            <th>Name</th>
+            <th>LastName</th>
+            <th>PESEL</th>
+            <th>DateOfBirth</th>
+            <th>Edit Patient</th>
+            <th>Remove Patient</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var patient in _patients)
-            {
-                <tr>
-                    <td>@patient.Name</td>
-                    <td>@patient.LastName</td>
-                    <td>@patient.PESEL</td>
-                    <td>@patient.DateOfBirth</td>
-                </tr>
-            }
+        @foreach (var patient in _patients)
+        {
+            <tr>
+                <td>@patient.Name</td>
+                <td>@patient.LastName</td>
+                <td>@patient.PESEL</td>
+                <td>@patient.DateOfBirth</td>
+                <td><button class="btn btn-primary" @onclick="@(() => EditPatient(patient.Id))">Edit</button></td>
+                <td><button class="btn btn-danger" @onclick="@(() => DeletePatient(patient.Id))">Edit</button></td>
+            </tr>
+        }
         </tbody>
     </table>
+    
+    <button class="btn btn-primary" @onclick="AddPatient">Add new Patient</button>
 }
 
 @code {
@@ -43,4 +50,22 @@ else
     {
         _patients = await PatientService.GetAllPatientsAsync();
     }
+
+    void AddPatient()
+    {
+        NavigationManager.NavigateTo("/edit-patient");
+    }
+
+    void EditPatient(int id)
+    {
+        NavigationManager.NavigateTo($"/edit-patient/{id}");
+    }
+
+    async Task DeletePatient(int id)
+    {
+        await PatientService.DeletePatientAsync(id);
+        NavigationManager.NavigateTo("/patient");
+        
+    }
+
 }

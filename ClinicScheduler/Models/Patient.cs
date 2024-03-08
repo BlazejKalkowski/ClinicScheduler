@@ -23,5 +23,7 @@ namespace ClinicScheduler.Models
         public string PESEL {  get; set; }
         [Required]
         public DateTime DateOfBirth {  get; set; }
+        
+        public ICollection<Visit> Visits { get; set; }
     }
 }

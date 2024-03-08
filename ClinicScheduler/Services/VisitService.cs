@@ -37,6 +37,12 @@ namespace ClinicScheduler.Services
             return visit;
         }
 
+        public async Task AddVisitAsync(Visit visit)
+        {
+            await Task.Delay(100);
+            _visits.Add(visit);
+        }
+
         public async Task UpdateVisitAsync(Visit visit, int id)
         {
             await Task.Delay(100);

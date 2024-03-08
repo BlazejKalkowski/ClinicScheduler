@@ -20,5 +20,7 @@ namespace ClinicScheduler.Models
 
         [Required]
         public string Specialization { get; set; }
+        
+        public ICollection<Visit> Visits { get; set; }
     }
 }

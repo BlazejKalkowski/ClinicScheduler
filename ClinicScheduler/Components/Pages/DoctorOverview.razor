@@ -22,6 +22,7 @@ else
                 <th>LastName</th>
                 <th>Specialization</th>
                 <th>Edit Doctor</th>
+                <th>Delete Doctor</th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,7 @@ else
                     <td>@doctor.LastName</td>
                     <td>@doctor.Specialization</td>
                     <td><button class="btn btn-primary" @onclick="@(() => EditDoctor(doctor.Id))">Edit</button></td>
+                    <td><button class="btn btn-danger" @onclick="@(() => DeleteDoctor(doctor.Id))">Delete</button></td>
                 </tr>
             }
         </tbody>
@@ -57,6 +59,12 @@ else
     void EditDoctor(int id)
     {
         NavigationManager.NavigateTo($"/edit-doctor/{id}");
+    }
+    
+    async Task DeleteDoctor(int id)
+    {
+        await DoctorService.DeleteDoctorAsync(id);
+        NavigationManager.NavigateTo($"/doctor");
     }
 
 }

@@ -1,0 +1,55 @@
+@page "/edit-visit"
+@page "/edit-visit/{int:id}"
+@using ClinicScheduler.Models
+@using ClinicScheduler.Interfaces
+
+@inject IVisitService VisitService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+@if (Id is null)
+{
+    <PageTitle>Add a new Visit</PageTitle>
+    <h4>Add a new Visit</h4>
+}
+else
+{
+    <PageTitle>Edit @CurrentVisit.Patient visit on @CurrentVisit.DateOfVisit</PageTitle>
+    <h4>Edit @CurrentVisit.Patient visit on @CurrentVisit.DateOfVisit</h4>
+}
+
+<EditForm Model="CurrentVisit" OnSubmit="HandleSubmit">
+    
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    public Visit CurrentVisit { get; set; } = new();
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id is not null)
+        {
+            var visit = await VisitService.GetVistByIdAsync((int)Id);
+            if (visit is not null)
+                CurrentVisit = visit;
+        }
+    }
+
+    async Task HandleSubmit()
+    {
+        if (Id is not null)
+        {
+            await VisitService.UpdateVisitAsync(CurrentVisit, (int)Id);
+            NavigationManager.NavigateTo("/visit");
+        }
+        else
+        {
+            await VisitService.AddVisitAsync(CurrentVisit);
+            NavigationManager.NavigateTo("/visit");
+        }
+    }
+
+}

@@ -26,6 +26,12 @@ namespace ClinicScheduler.Services
             return patient;
         }
 
+        public async Task AddPatientAsync(Patient patient)
+        {
+            await Task.Delay(100);
+            _patients.Add(patient);
+        }
+
         public async Task UpdatePatientAsync(Patient patient, int id)
         {
             await Task.Delay(100);
