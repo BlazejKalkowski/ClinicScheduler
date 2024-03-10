@@ -6,7 +6,7 @@ namespace ClinicScheduler.Services
 {
     public class DoctorService : IDoctorService
     {
-        private static List<Doctor> _doctors = new List<Doctor> 
+        public static List<Doctor> _doctors = new List<Doctor> 
         {
             new Doctor(){Id = 1, Name = "Artur", LastName = "Jablonski", Specialization = "Cardiologist"},
             new Doctor(){Id = 2, Name = "Jerzy", LastName = "Mineralski", Specialization = "Dermatologist"},

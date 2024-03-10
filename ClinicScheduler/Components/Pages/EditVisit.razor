@@ -22,20 +22,21 @@ else
 }
 
 <EditForm Model="CurrentVisit" OnSubmit="HandleSubmit">
-    <div>
-        <label for="patientName">Patient Name</label>
-        <InputText id="patientName" @bind-Value="@CurrentPatient.Name"></InputText>
-    </div>
-    <div>
-        <label for="patientSurname">Patient Surmame</label>
-        <InputText id="patientSurname" @bind-Value="@CurrentPatient.LastName"></InputText>
-    </div>
     <div class="col-sm-10">
         <label> Doctor</label>
-        <InputSelect id="doctor" @bind-Value="CurrenDoctor.Id" class="form-control">
+        <InputSelect id="doctor" @bind-Value="CurrentVisit.DoctorId" class="form-control">
             @foreach (var doctor in Doctors)
             {
                 <option value="@doctor.Id">@doctor.FullName</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="col-sm-10">
+        <label> Patient</label>
+        <InputSelect id="patient" @bind-Value="CurrentVisit.PatientId" class="form-control">
+            @foreach (var patient in Patients)
+            {
+                <option value="@patient.Id">@patient.FullName</option>
             }
         </InputSelect>
     </div>
@@ -56,11 +57,12 @@ else
 
     public Visit CurrentVisit { get; set; } = new();
     public Patient CurrentPatient { get; set; } = new();
-    public Doctor CurrenDoctor { get; set; } = new();
+    public Doctor CurrentDoctor { get; set; } = new();
     
     public List<Doctor> Doctors { get; set; } = new();
-    public string DoctorId { get; set; }
 
+    public List<Patient> Patients { get; set; } = new();
+    public string PatientId { get; set; }
     
     protected override async Task OnParametersSetAsync()
     {
@@ -70,18 +72,19 @@ else
             if (visit is not null)
                 CurrentVisit = visit;
                 CurrentPatient = CurrentVisit.Patient;
-                CurrenDoctor = CurrentVisit.Doctor;
-                DoctorId = CurrenDoctor.Id.ToString();
+                CurrentDoctor = CurrentVisit.Doctor;
+                PatientId = CurrentPatient.Id.ToString();
         }
         Doctors = await DoctorService.GetAllDoctorsAsync();
-         
-         
+        Patients = await PatientService.GetAllPatientsAsync();
     }
 
     async Task HandleSubmit()
     {
         if (Id is not null)
         {
+            Console.WriteLine(CurrentVisit.PatientId);
+            Console.WriteLine(CurrentVisit.DoctorId);
             await VisitService.UpdateVisitAsync(CurrentVisit, (int)Id);
             NavigationManager.NavigateTo("/visit");
         }

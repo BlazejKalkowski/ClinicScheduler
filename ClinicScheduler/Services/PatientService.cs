@@ -5,7 +5,7 @@ namespace ClinicScheduler.Services
 {
     public class PatientService : IPatientService
     {
-        private static List<Patient> _patients = new List<Patient>
+        public static List<Patient> _patients = new List<Patient>
         {
            new Patient(){Id = 1, Name= "Jan", LastName = "Kowalski", PESEL = "55110479461", DateOfBirth = new DateTime(1955,11,04)},
            new Patient(){Id = 2, Name= "Alina", LastName = "Mleczarska", PESEL = "88062109178", DateOfBirth = new DateTime(1988,06,21)},
