@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace ClinicScheduler.Models
+namespace ClinicScheduler.Entieties
 {
     public class Visit
     {

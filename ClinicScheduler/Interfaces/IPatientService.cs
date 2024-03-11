@@ -1,4 +1,5 @@
-﻿using ClinicScheduler.Models;
+﻿using ClinicScheduler.Entieties;
+
 
 namespace ClinicScheduler.Interfaces
 {

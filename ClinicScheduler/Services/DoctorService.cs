@@ -1,6 +1,5 @@
 ﻿using ClinicScheduler.Interfaces;
-using ClinicScheduler.Models;
-using System;
+using ClinicScheduler.Entieties;
 
 namespace ClinicScheduler.Services
 {
