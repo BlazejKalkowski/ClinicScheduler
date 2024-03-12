@@ -23,7 +23,7 @@ namespace ClinicScheduler.Entieties
         public string PESEL {  get; set; }
         [Required]
         public DateTime DateOfBirth {  get; set; }
-        
-        public ICollection<Visit> Visits { get; set; }
+
+        public IList<Visit> Visits { get; set; } = new List<Visit>();
     }
 }

@@ -20,7 +20,8 @@ namespace ClinicScheduler.Entieties
 
         [Required]
         public string Specialization { get; set; }
+
+        public IList<Visit> Visits { get; set; } = new List<Visit>();
         
-        public ICollection<Visit> Visits { get; set; }
     }
 }
