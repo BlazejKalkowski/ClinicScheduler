@@ -1,12 +1,25 @@
+using ClinicScheduler;
 using ClinicScheduler.Components;
 using ClinicScheduler.Interfaces;
 using ClinicScheduler.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+IConfigurationRoot configuration = new ConfigurationBuilder()
+    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+    .AddJsonFile("appsettings.json",optional: true, reloadOnChange: true)
+    .Build();
 
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
+
+var connectionString = configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ClinicDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -31,3 +44,4 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
+
