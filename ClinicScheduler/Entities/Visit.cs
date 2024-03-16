@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ClinicScheduler.Entieties
+namespace ClinicScheduler.Entities
 {
     public class Visit
     {
@@ -15,7 +15,7 @@ namespace ClinicScheduler.Entieties
         
         public int PatientId { get; set; }
         [Required]
-        public DateTime DateOfVisit { get; set; }
+        public DateTime  DateOfVisit { get; set; }
         public int PrescriptionNumber { get; set; }
 
         public  bool IsConfirmed { get; set; }

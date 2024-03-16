@@ -1,4 +1,4 @@
-﻿using ClinicScheduler.Entieties;
+﻿using ClinicScheduler.Entities;
 using ClinicScheduler.Interfaces;
 
 namespace ClinicScheduler.Services

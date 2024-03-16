@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ClinicScheduler.Entieties
+namespace ClinicScheduler.Entities
 {
     public class Patient
     {
@@ -22,7 +22,7 @@ namespace ClinicScheduler.Entieties
         [RegularExpression(@"^\d{11}$", ErrorMessage = "Wrong number of PESEL")]
         public string PESEL {  get; set; }
         [Required]
-        public DateTime DateOfBirth {  get; set; }
+        public DateTime  DateOfBirth {  get; set; }
 
         public IList<Visit> Visits { get; set; } = new List<Visit>();
     }

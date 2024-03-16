@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ClinicScheduler.Entieties
+namespace ClinicScheduler.Entities
 {
     public class Doctor
     {
