@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClinicScheduler;
 
-public class ClinicDbContext : IdentityDbContext<ApplicationUser>
+public class ClinicDbContext : IdentityDbContext
 {
     public ClinicDbContext(DbContextOptions<ClinicDbContext> options)
         : base(options)
@@ -17,7 +17,6 @@ public class ClinicDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Visit> Visits { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
         base.OnModelCreating(modelBuilder);
     }
 }

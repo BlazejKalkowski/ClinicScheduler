@@ -5,6 +5,7 @@ using ClinicScheduler.Entities;
 using ClinicScheduler.Interfaces;
 using ClinicScheduler.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +28,7 @@ builder.Services.AddDbContext<ClinicDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
-builder.Services.AddIdentityCore<ApplicationUser>()
+builder.Services.AddDefaultIdentity<IdentityUser>()
         .AddEntityFrameworkStores<ClinicDbContext>()
         .AddApiEndpoints();
 
@@ -44,7 +45,7 @@ if (!app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    // app.UseHsts();
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
