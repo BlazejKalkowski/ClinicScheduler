@@ -7,6 +7,7 @@ using ClinicScheduler.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +20,12 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 
-
-builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = IdentityConstants.ApplicationScheme;
+        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+    })
+    .AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ClinicDbContext>(options =>
@@ -28,7 +33,7 @@ builder.Services.AddDbContext<ClinicDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
-builder.Services.AddDefaultIdentity<IdentityUser>()
+builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
         .AddEntityFrameworkStores<ClinicDbContext>()
         .AddApiEndpoints();
 
@@ -45,12 +50,11 @@ if (!app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    // app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 
-app.MapIdentityApi<ApplicationUser>();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
@@ -58,6 +62,7 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+app.MapIdentityApi<IdentityUser>();
 app.MapGet("/test", (ClaimsPrincipal user) => $"Hello {user.Identity!.Name}").RequireAuthorization();
 app.Run();
 
