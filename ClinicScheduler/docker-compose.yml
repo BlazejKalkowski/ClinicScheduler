@@ -16,7 +16,6 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - ConnectionString__DefaultConnection=User ID= postgres;Password=ClinicDb123;Server=clinicdb;Port=5432;Database=ClinicDb;Pooling=true;
       - ASPNETCORE_URLS=http://+:80
       - ASPNETCORE_ENVIRONMENT=Development 
     networks:
