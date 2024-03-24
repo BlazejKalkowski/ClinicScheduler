@@ -23,7 +23,7 @@ namespace ClinicScheduler.Services
 
         public async Task AddDoctorAsync(Doctor doctor)
         {
-            _doctors.Add(doctor);
+            _dbContext.Add(doctor);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -35,8 +35,8 @@ namespace ClinicScheduler.Services
                 dbDoctor.Name = doctor.Name;
                 dbDoctor.LastName = doctor.LastName;
                 dbDoctor.Specialization = doctor.Specialization;
+                await _dbContext.SaveChangesAsync();
             }
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteDoctorAsync(int id)
