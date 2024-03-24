@@ -6,6 +6,7 @@ namespace ClinicScheduler.Services
 {
     public class VisitService : IVisitService
     {
+        private readonly ClinicDbContext _dbContext;
         private DoctorService _doctorService;
         public static List<Visit> _visits = new List<Visit>
         {
@@ -32,6 +33,10 @@ namespace ClinicScheduler.Services
         };
 
 
+        public VisitService(ClinicDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public async Task<List<Visit>> GetAllVisitsAsync()
         {
             await Task.Delay(100);
