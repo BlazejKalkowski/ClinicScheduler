@@ -9,16 +9,16 @@
       }
     },
     "profiles": {
-      "http": {
-        "commandName": "Project",
-        "dotnetRunMessages": true,
+      "Docker" : {
+        "commandName": "Docker",
         "launchBrowser": true,
-        "applicationUrl": "http://localhost:5130",
         "environmentVariables": {
+          "ASPNETCORE_URLS" : "http://+:80",
           "ASPNETCORE_ENVIRONMENT": "Development"
-        }
+        },
+        "publishAllPorts": true
       },
-      "https": {
+      "http": {
         "commandName": "Project",
         "dotnetRunMessages": true,
         "launchBrowser": true,
