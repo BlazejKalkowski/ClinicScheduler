@@ -9,8 +9,8 @@
       }
     },
     "profiles": {
-      "Docker" : {
-        "commandName": "Docker",
+      "clinicapp" : {
+        "commandName": "Project",
         "launchBrowser": true,
         "environmentVariables": {
           "ASPNETCORE_URLS" : "http://+:80",
