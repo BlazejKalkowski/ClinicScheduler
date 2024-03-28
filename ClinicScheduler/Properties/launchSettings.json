@@ -16,7 +16,7 @@
           "ASPNETCORE_URLS" : "http://+:80",
           "ASPNETCORE_ENVIRONMENT": "Development"
         },
-        "publishAllPorts": true
+        "publishAllPorts": 80
       },
       "http": {
         "commandName": "Project",
