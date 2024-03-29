@@ -24,6 +24,6 @@ namespace ClinicScheduler.Entities
         [Required]
         public DateTime  DateOfBirth {  get; set; }
 
-        public IList<Visit> Visits { get; set; } = new List<Visit>();
+        public List<Visit> Visits { get; set; } = new List<Visit>();
     }
 }

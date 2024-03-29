@@ -15,8 +15,12 @@ namespace ClinicScheduler.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<Visit>> GetAllVisitsAsync() =>
-            await _dbContext.Visits.Include(x => x.Doctor).Include(y => y.Patient).ToListAsync();
+        public async Task<List<Visit>> GetAllVisitsAsync()
+        {
+            var visits = await _dbContext.Visits.Include(x => x.Doctor).Include(y => y.Patient).ToListAsync();
+            return visits;
+        }
+            
 
         public async Task<Visit> GetVistByIdAsync(int id)
         {
