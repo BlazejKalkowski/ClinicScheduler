@@ -41,6 +41,10 @@ else
         </InputSelect>
     </div>
     <div>
+            <label for="dateOfVisit">Date</label>
+            <InputDate @bind-Value="@CurrentVisit.DateOfVisit" class="form-control" />
+        </div>
+    <div>
         <label>Is Confirmed</label>
         <InputCheckbox  @bind-Value="@CurrentVisit.IsConfirmed"></InputCheckbox>
     </div>
