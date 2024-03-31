@@ -1,6 +1,38 @@
 @page "/login"
+@using ClinicScheduler.Dto
+
+@inject NavigationManager NavigationManager
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
+        <div class="mb-3 text-center">
+            <h3>LOGIN</h3>
+        </div>
+        <div class="mb-3">
+            <label>Email</label>
+            <input @bind="loginModel.Email" class="form-control" placeholder="Email" />
+        </div>
+        <div class="mb-3">
+            <label>Password</label>
+            <input @bind="loginModel.Password" type="password" class="form-control" placeholder="Password" />
+        </div>
+        <div class="mb-3 d-grid gap-2">
+            <button @onclick="Authenticate" class="btn btn-primary">Login</button>
+        </div>
+    </div>
+</div>
+
 <h3>Login</h3>
 
+
+
 @code {
-    
+    public LoginDto loginModel = new();
+
+    private Task Authenticate()
+    {
+        
+        NavigationManager.NavigateTo("/");
+    }
+
 }
