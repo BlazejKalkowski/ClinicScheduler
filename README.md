@@ -78,5 +78,8 @@ Experience the convenience and efficiency of ClinicScheduler today – because y
     </li>
 </ul>
 
-
+If you want run app please :
+git clone
+cd ClinicScheduler
+docker-compose up -d
 
