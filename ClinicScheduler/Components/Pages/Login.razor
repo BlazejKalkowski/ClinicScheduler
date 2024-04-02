@@ -1,7 +1,11 @@
 @page "/login"
 @using ClinicScheduler.Dto
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
 
 @inject NavigationManager NavigationManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject IdentityRedirectManager 
 
 <div class="row">
     <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
@@ -27,12 +31,26 @@
 
 
 @code {
-    public LoginDto loginModel = new();
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default !;
+    private LoginDto loginModel = new();
+    
 
-    private Task Authenticate()
+    protected override async Task OnInitializedAsync()
     {
+        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        {
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+        }
+    }
+
+    private async Task Authenticate()
+    {
+        var result = await SignInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password);
+        if (result.Succeeded)
+        {
+            NavigationManager.NavigateTo("/");
+        }
         
-        NavigationManager.NavigateTo("/");
     }
 
 }

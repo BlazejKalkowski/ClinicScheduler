@@ -3,11 +3,13 @@ using ClinicScheduler;
 using ClinicScheduler.Components;
 using ClinicScheduler.Entities;
 using ClinicScheduler.Interfaces;
+using ClinicScheduler.Middleware;
 using ClinicScheduler.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +37,8 @@ builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.Require
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-
+builder.Services.AddScoped<ProtectedSessionStorage>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticateStateProvider>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
