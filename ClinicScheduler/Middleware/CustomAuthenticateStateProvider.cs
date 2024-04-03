@@ -8,9 +8,8 @@ namespace ClinicScheduler.Middleware;
 
 public class CustomAuthenticateStateProvider : AuthenticationStateProvider
 {
-    private readonly ProtectedSessionStorage _sessionStorage;
     private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
-    private const string UserSessionKey = "UserSession";
+    
     private readonly IJSRuntime _jsRuntime;
     
 
@@ -59,5 +58,10 @@ public class CustomAuthenticateStateProvider : AuthenticationStateProvider
             claimsPrincipal = _anonymous;
         }
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
-    } 
+    }
+
+    public void LogOutAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
