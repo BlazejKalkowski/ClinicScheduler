@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.JSInterop;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 
+builder.Services.AddHttpClient("HttpMessageHandler").AddHttpMessageHandler<AccessTokenMessageHandler>();
 builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
 var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -38,7 +40,8 @@ builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.Require
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddScoped<ProtectedSessionStorage>();
-builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticateStateProvider>();
+builder.Services.AddScoped<IJSRuntime>();
+builder.Services.AddScoped<AuthenticationStateProvider,CustomAuthenticateStateProvider>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ClinicScheduler.Dto;
 
-public class LoginDto
+public class UserDto
 {
     [Required]
     [DataType(DataType.EmailAddress)]
@@ -10,4 +10,5 @@ public class LoginDto
     [Required]
     [DataType(DataType.Password)]
     public string Password { get; set; }
+    public Dictionary<string,string> Claims { get; set; }
 }

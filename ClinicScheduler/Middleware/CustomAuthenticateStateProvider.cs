@@ -2,6 +2,7 @@ using System.Security.Claims;
 using ClinicScheduler.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.JSInterop;
 
 namespace ClinicScheduler.Middleware;
 
@@ -10,10 +11,12 @@ public class CustomAuthenticateStateProvider : AuthenticationStateProvider
     private readonly ProtectedSessionStorage _sessionStorage;
     private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
     private const string UserSessionKey = "UserSession";
+    private readonly IJSRuntime _jsRuntime;
+    
 
-    public CustomAuthenticateStateProvider(ProtectedSessionStorage sessionStorage)
+    public CustomAuthenticateStateProvider(IJSRuntime jsRuntime)
     {
-        _sessionStorage = sessionStorage;
+        _jsRuntime = jsRuntime;
     }
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {

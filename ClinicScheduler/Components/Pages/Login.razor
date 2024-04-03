@@ -5,7 +5,6 @@
 
 @inject NavigationManager NavigationManager
 @inject SignInManager<IdentityUser> SignInManager
-@inject IdentityRedirectManager 
 
 <div class="row">
     <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
@@ -14,11 +13,11 @@
         </div>
         <div class="mb-3">
             <label>Email</label>
-            <input @bind="loginModel.Email" class="form-control" placeholder="Email" />
+            <input @bind="_userModel.Email" class="form-control" placeholder="Email" />
         </div>
         <div class="mb-3">
             <label>Password</label>
-            <input @bind="loginModel.Password" type="password" class="form-control" placeholder="Password" />
+            <input @bind="_userModel.Password" type="password" class="form-control" placeholder="Password" />
         </div>
         <div class="mb-3 d-grid gap-2">
             <button @onclick="Authenticate" class="btn btn-primary">Login</button>
@@ -32,7 +31,7 @@
 
 @code {
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default !;
-    private LoginDto loginModel = new();
+    private UserDto _userModel = new();
     
 
     protected override async Task OnInitializedAsync()
@@ -45,12 +44,12 @@
 
     private async Task Authenticate()
     {
-        var result = await SignInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password);
-        if (result.Succeeded)
-        {
-            NavigationManager.NavigateTo("/");
-        }
-        
+        // // var result = await SignInManager.PasswordSignInAsync();
+        // if (result.Succeeded)
+        // {
+        //     NavigationManager.NavigateTo("/");
+        // }
+        NavigationManager.NavigateTo("/");
     }
 
 }
