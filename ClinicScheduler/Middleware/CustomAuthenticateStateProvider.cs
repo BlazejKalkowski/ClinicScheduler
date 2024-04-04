@@ -10,62 +10,39 @@ namespace ClinicScheduler.Middleware;
 
 public class CustomAuthenticateStateProvider : AuthenticationStateProvider
 {
-    private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
-    
     private readonly IJSRuntime _jsRuntime;
     
-
     public CustomAuthenticateStateProvider(IJSRuntime jsRuntime)
     {
         _jsRuntime = jsRuntime;
     }
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        try
-        {
-
-            var userValue = await _jsRuntime.InvokeAsync<string?>("localStorage.getItem", "token");
+            var userValue = await _jsRuntime.InvokeAsync<string?>("localStorage.getItem", "user");
             var claims = new ClaimsIdentity();
 
             if (userValue is not null)
             {
                 var user = JsonSerializer.Deserialize<UserDto>(userValue);
-                var claimList = user.Claims.Select(x => new Claim(x.Key, x.Value));
+                var claimList = user.Claims.Select(x => new Claim(x.Key, x.Value)).ToList();
                 claims = new ClaimsIdentity(claimList, "auth");
             }
 
             var principal = new ClaimsPrincipal(claims);
             return new AuthenticationState(principal);
-            
-        }
-        catch
-        {
-            return await Task.FromResult(new AuthenticationState(_anonymous));
-        }
     }
 
-    public async Task UpdateAuthenticationState(UserSession userSession)
+    public async Task AuthenticateAsync(UserDto? user)
     {
-        ClaimsPrincipal claimsPrincipal;
-        if (userSession != null)
-        {
-            await _sessionStorage.SetAsync(UserSessionKey, userSession);
-            claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, userSession.UserName),
-                new Claim(ClaimTypes.Role, userSession.Role)
-            }));
-        }
-        else
-        {
-            await _sessionStorage.DeleteAsync(UserSessionKey);
-            claimsPrincipal = _anonymous;
-        }
-        NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
+        var json = JsonSerializer.Serialize(user);
+        await _jsRuntime.InvokeAsync<UserDto?>("localStorage.SetItem", "user",json);
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
+    
 
-    public void LogOutAsync()
+    public async Task LogOutAsync()
     {
-        throw new NotImplementedException();
+        await _jsRuntime.InvokeAsync<UserDto?>("localStorage.removeItem","user");
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 }
