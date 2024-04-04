@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using System.Text.Json;
+using ClinicScheduler.Dto;
 using ClinicScheduler.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
@@ -21,18 +23,20 @@ public class CustomAuthenticateStateProvider : AuthenticationStateProvider
     {
         try
         {
-            var userSessionStorageResult = await _sessionStorage.GetAsync<UserSession>(UserSessionKey);
-            var userSession = userSessionStorageResult.Success ? userSessionStorageResult.Value : null;
-            if (userSession == null)
+
+            var userValue = await _jsRuntime.InvokeAsync<string?>("localStorage.getItem", "token");
+            var claims = new ClaimsIdentity();
+
+            if (userValue is not null)
             {
-                return await Task.FromResult(new AuthenticationState(_anonymous));
+                var user = JsonSerializer.Deserialize<UserDto>(userValue);
+                var claimList = user.Claims.Select(x => new Claim(x.Key, x.Value));
+                claims = new ClaimsIdentity(claimList, "auth");
             }
-            var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, userSession.UserName),
-                new Claim(ClaimTypes.Role, userSession.Role)
-            }));
-            return await Task.FromResult(new AuthenticationState(claimsPrincipal));
+
+            var principal = new ClaimsPrincipal(claims);
+            return new AuthenticationState(principal);
+            
         }
         catch
         {
