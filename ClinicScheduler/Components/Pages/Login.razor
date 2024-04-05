@@ -1,55 +1,48 @@
 @page "/login"
 @using ClinicScheduler.Dto
+@using ClinicScheduler.Middleware
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
+@using System.Net
 
 @inject NavigationManager NavigationManager
-@inject SignInManager<IdentityUser> SignInManager
-
-<div class="row">
-    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
-        <div class="mb-3 text-center">
-            <h3>LOGIN</h3>
-        </div>
-        <div class="mb-3">
-            <label>Email</label>
-            <input @bind="_userModel.Email" class="form-control" placeholder="Email" />
-        </div>
-        <div class="mb-3">
-            <label>Password</label>
-            <input @bind="_userModel.Password" type="password" class="form-control" placeholder="Password" />
-        </div>
-        <div class="mb-3 d-grid gap-2">
-            <button @onclick="Authenticate" class="btn btn-primary">Login</button>
-        </div>
-    </div>
-</div>
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject CustomAuthenticateStateProvider AuthenticateStateProvider
 
 <h3>Login</h3>
 
-
+<MudGrid Justify="Justify.Center">
+    <MudItem lg="3">
+        <EditForm OnValidSubmit="Submit" Model="_loginDto">
+            <MudField FullWidth="true" Label="Email" @bind-Value="_loginDto.Email" />  
+            <MudField FullWidth="true" Label="Password" @bind-Value="_loginDto.Password"/>  
+            <MudButton ButtonType="ButtonType.Submit">Sign In</MudButton>
+        </EditForm>
+    </MudItem>
+</MudGrid>
 
 @code {
     [CascadingParameter] private HttpContext HttpContext { get; set; } = default !;
-    private UserDto _userModel = new();
+    private LoginDto _loginDto = new();
     
-
-    protected override async Task OnInitializedAsync()
+    private async Task Submit()
     {
-        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        var response = await Http.PostAsJsonAsync("/login", _loginDto);
+
+        if (response.IsSuccessStatusCode)
         {
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-        }
-    }
+            var data = await response.Content.ReadAsStringAsync();
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "token", data);
+            var userInfoResponse = await Http.GetAsync("/account/info");
 
-    private async Task Authenticate()
-    {
-        // // var result = await SignInManager.PasswordSignInAsync();
-        // if (result.Succeeded)
-        // {
-        //     NavigationManager.NavigateTo("/");
-        // }
-        NavigationManager.NavigateTo("/");
+            if (userInfoResponse.IsSuccessStatusCode)
+            {
+                var userInfo = await userInfoResponse.Content.ReadFromJsonAsync<UserDto?>();
+                await AuthenticateStateProvider.AuthenticateAsync(userInfo);
+                NavigationManager.NavigateTo("/");
+            }
+        }
     }
 
 }
