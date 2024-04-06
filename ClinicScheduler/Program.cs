@@ -27,7 +27,6 @@ builder.Services.AddScoped<IVisitService, VisitService>();
 builder.Services.AddHttpClient("ClinicScheduler").AddHttpMessageHandler<AccessTokenMessageHandler>();
 builder.Services.AddScoped<AccessTokenMessageHandler>();
 builder.Services.AddScoped<CustomAuthenticateStateProvider>();
-builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<AuthenticationStateProvider>());
 builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
 var connectionString = configuration.GetConnectionString("DefaultConnection");
