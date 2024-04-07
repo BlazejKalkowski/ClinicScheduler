@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.JSInterop;
 using MudBlazor.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,13 @@ IConfigurationRoot configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json",optional: true, reloadOnChange: true)
     .Build();
 
+builder.Services.AddServerSideBlazor().AddCircuitOptions(o =>
+{
+    if (builder.Environment.IsDevelopment()) //only add details when debugging
+    {
+        o.DetailedErrors = true;
+    }
+});
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
@@ -27,6 +35,7 @@ builder.Services.AddScoped<IVisitService, VisitService>();
 builder.Services.AddHttpClient("ClinicScheduler").AddHttpMessageHandler<AccessTokenMessageHandler>();
 builder.Services.AddScoped<AccessTokenMessageHandler>();
 builder.Services.AddScoped<CustomAuthenticateStateProvider>();
+
 builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
 var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -68,6 +77,9 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapIdentityApi<IdentityUser>();
 // app.MapGet("/test", (ClaimsPrincipal user) => $"Hello {user.Identity!.Name}").RequireAuthorization();

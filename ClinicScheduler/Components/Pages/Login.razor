@@ -12,21 +12,33 @@
 
 <h3>Login</h3>
 
-<MudGrid Justify="Justify.Center">
-    <MudItem lg="3">
-        <EditForm OnValidSubmit="Submit" Model="_loginDto">
-            <MudField FullWidth="true" Label="Email" @bind-Value="_loginDto.Email" />  
-            <MudField FullWidth="true" Label="Password" @bind-Value="_loginDto.Password"/>  
-            <MudButton ButtonType="ButtonType.Submit">Sign In</MudButton>
-        </EditForm>
-    </MudItem>
-</MudGrid>
+
+<EditForm Model="_loginDto" OnSubmit="Submit">
+    <div class="form-group">
+        <label for="exampleInputUserName">Username</label>
+        <input type="email" class="form-control" id="exampleInputUserName" aria-describedby="emailHelp" @bind-value="_loginDto.UserName" placeholder="Username">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind-value="_loginDto.Email" placeholder="Enter email">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" @bind-value="_loginDto.Password" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
 
 @code {
-    [CascadingParameter] private HttpContext HttpContext { get; set; } = default !;
-    private LoginDto _loginDto = new();
-    
-    private async Task Submit()
+    private LoginDto _loginDto;
+
+    protected override Task OnInitializedAsync()
+    {
+        _loginDto = new();
+        return base.OnInitializedAsync();
+    }
+
+    public async Task Submit()
     {
         var response = await Http.PostAsJsonAsync("/login", _loginDto);
 
