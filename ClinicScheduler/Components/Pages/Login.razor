@@ -1,33 +1,28 @@
-@page "/login"
+@page "/Login"
 @using ClinicScheduler.Dto
 @using ClinicScheduler.Middleware
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
 @using System.Net
+@using Microsoft.AspNetCore.Mvc
 
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
 @inject CustomAuthenticateStateProvider AuthenticateStateProvider
 
+
 <h3>Login</h3>
 
-
-<EditForm Model="_loginDto" OnSubmit="Submit">
-    <div class="form-group">
-        <label for="exampleInputUserName">Username</label>
-        <input type="email" class="form-control" id="exampleInputUserName" aria-describedby="emailHelp" @bind-value="_loginDto.UserName" placeholder="Username">
-    </div>
-    <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" @bind-value="_loginDto.Email" placeholder="Enter email">
-    </div>
-    <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" @bind-value="_loginDto.Password" placeholder="Password">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</EditForm>
+<MudGrid Justify="Justify.Center">
+    <MudItem lg="3">
+        <EditForm OnInvalidSubmit="Submit" Model="_loginDto">
+            <MudTextField FullWidth="true" Label="Email" @bind-Value="_loginDto.Email"/>
+            <MudTextField FullWidth="true" InputType="InputType.Password" Label="Password" @bind-Value="_loginDto.Password" />
+            <MudButton ButtonType="ButtonType.Submit">Sign In</MudButton>
+        </EditForm>
+    </MudItem>
+</MudGrid>
 
 @code {
     private LoginDto _loginDto;
@@ -38,15 +33,15 @@
         return base.OnInitializedAsync();
     }
 
-    public async Task Submit()
+    private async Task Submit()
     {
-        var response = await Http.PostAsJsonAsync("/login", _loginDto);
+        var response = await Http.PostAsJsonAsync("login", _loginDto);
 
         if (response.IsSuccessStatusCode)
         {
             var data = await response.Content.ReadAsStringAsync();
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "token", data);
-            var userInfoResponse = await Http.GetAsync("/account/info");
+            var userInfoResponse = await Http.GetAsync("account/info");
 
             if (userInfoResponse.IsSuccessStatusCode)
             {
