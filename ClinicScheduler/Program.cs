@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.JSInterop;
 using MudBlazor.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Antiforgery;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,8 +57,13 @@ builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMudServices();
+builder.Services.Configure<AntiforgeryOptions>(options =>
+{
+    options.SuppressXFrameOptionsHeader = true;
+});
 var app = builder.Build();
 
+app.UseAntiforgery();
 app.UseSwagger();
 app.UseSwaggerUI();
 // Configure the HTTP request pipeline.
@@ -70,8 +76,8 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthentication();
 app.UseAuthorization();
+app.UseAuthentication();
 app.UseAntiforgery();
 app.MapIdentityApi<IdentityUser>();
 
