@@ -1,6 +1,7 @@
 @page "/zaloguj"
 @using ClinicScheduler.Dto
 @using ClinicScheduler.Middleware
+@using Microsoft.AspNetCore.Antiforgery
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
 @using System.Net
@@ -10,38 +11,50 @@
 @inject IJSRuntime JSRuntime
 @inject CustomAuthenticateStateProvider AuthenticateStateProvider
 
+@attribute [RequireAntiforgeryToken(required: false)]
+
 
 <h3>Login</h3>
 
-<MudGrid Justify="Justify.Center">
+@* <MudGrid Justify="Justify.Center">
     <MudItem lg="3">
         <EditForm OnInvalidSubmit="Submit" Model="_loginDto">
             <MudTextField FullWidth="true" Label="Email" @bind-Value="_loginDto.Email"/>
             <MudTextField FullWidth="true" InputType="InputType.Password" Label="Password" @bind-Value="_loginDto.Password" />
+            <AntiforgeryToken />
             <MudButton ButtonType="ButtonType.Submit">Sign In</MudButton>
         </EditForm>
     </MudItem>
-</MudGrid>
+</MudGrid> *@
+
+<form method="post" @formname="contact" @onsubmit="Submit">
+    <div>
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="_loginDto.Email" />
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <InputText id="password" @bind-Value="_loginDto.Password"  />
+    </div>
+    <button>Submit</button>
+    <AntiforgeryToken />
+</form>
 
 
 @code {
-    private LoginDto _loginDto;
+    [SupplyParameterFromForm]
+    private LoginDto _loginDto{ get; set; } = new();
 
-    protected override Task OnInitializedAsync()
-    {
-        _loginDto = new();
-        return base.OnInitializedAsync();
-    }
 
     private async Task Submit()
     {
-        var response = await Http.PostAsJsonAsync("login", _loginDto);
+        var response = await Http.PostAsJsonAsync("/login", _loginDto);
 
         if (response.IsSuccessStatusCode)
         {
             var data = await response.Content.ReadAsStringAsync();
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "token", data);
-            var userInfoResponse = await Http.GetAsync("account/info");
+            var userInfoResponse = await Http.GetAsync("/account/info");
 
             if (userInfoResponse.IsSuccessStatusCode)
             {

@@ -14,6 +14,8 @@ using Microsoft.JSInterop;
 using MudBlazor.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.Extensions.Configuration;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +35,16 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 
-builder.Services.AddHttpClient("ClinicScheduler").AddHttpMessageHandler<AccessTokenMessageHandler>();
+var baseUri = builder.Configuration.GetValue<string>("BaseUri");
+
+if (!string.IsNullOrEmpty(baseUri) && Uri.TryCreate(baseUri, UriKind.Absolute, out var uri))
+{
+    builder.Services.AddHttpClient("ClinicScheduler", client =>
+    {
+        client.BaseAddress = uri;
+    }).AddHttpMessageHandler<AccessTokenMessageHandler>();
+}
+
 builder.Services.AddScoped<AccessTokenMessageHandler>();
 builder.Services.AddScoped<CustomAuthenticateStateProvider>();
 
@@ -48,19 +59,15 @@ builder.Services.AddDbContext<ClinicDbContext>(options =>
 builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
         .AddEntityFrameworkStores<ClinicDbContext>()
         .AddApiEndpoints();
-
+builder.Services.AddRazorPages();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddScoped<ProtectedSessionStorage>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMudServices();
-builder.Services.Configure<AntiforgeryOptions>(options =>
-{
-    options.SuppressXFrameOptionsHeader = true;
-});
+
 var app = builder.Build();
 
 app.UseAntiforgery();
@@ -74,15 +81,16 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseAntiforgery();
+app.MapRazorPages();
 app.MapIdentityApi<IdentityUser>();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
 
 app.Run();
 
