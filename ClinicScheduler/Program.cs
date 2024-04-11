@@ -37,13 +37,12 @@ builder.Services.AddScoped<IVisitService, VisitService>();
 
 var baseUri = builder.Configuration.GetValue<string>("BaseUri");
 
-if (!string.IsNullOrEmpty(baseUri) && Uri.TryCreate(baseUri, UriKind.Absolute, out var uri))
+builder.Services.AddScoped(sp => new HttpClient
 {
-    builder.Services.AddHttpClient("ClinicScheduler", client =>
-    {
-        client.BaseAddress = uri;
-    }).AddHttpMessageHandler<AccessTokenMessageHandler>();
-}
+    BaseAddress = new Uri(baseUri)
+});
+
+builder.Services.AddHttpClient("ClinicScheduler").AddHttpMessageHandler<AccessTokenMessageHandler>();
 
 builder.Services.AddScoped<AccessTokenMessageHandler>();
 builder.Services.AddScoped<CustomAuthenticateStateProvider>();
