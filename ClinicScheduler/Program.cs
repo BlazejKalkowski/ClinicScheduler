@@ -1,21 +1,11 @@
-using System.Security.Claims;
 using ClinicScheduler;
 using ClinicScheduler.Components;
-using ClinicScheduler.Entities;
 using ClinicScheduler.Interfaces;
 using ClinicScheduler.Middleware;
 using ClinicScheduler.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Microsoft.JSInterop;
 using MudBlazor.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.Extensions.Configuration;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
