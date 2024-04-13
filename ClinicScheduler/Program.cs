@@ -25,12 +25,12 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 
-var baseUri = builder.Configuration.GetValue<string>("BaseUri");
-
-builder.Services.AddScoped(sp => new HttpClient
-{
-    BaseAddress = new Uri(baseUri)
-});
+// var baseUri = builder.Configuration.GetValue<string>("BaseUri");
+//
+// builder.Services.AddScoped(sp => new HttpClient
+// {
+//     BaseAddress = new Uri(baseUri)
+// });
 
 builder.Services.AddHttpClient("ClinicScheduler").AddHttpMessageHandler<AccessTokenMessageHandler>();
 
@@ -58,7 +58,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMudServices();
 
 var app = builder.Build();
-
 app.UseAntiforgery();
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -79,7 +78,6 @@ app.MapIdentityApi<IdentityUser>();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-
 
 app.Run();
 
