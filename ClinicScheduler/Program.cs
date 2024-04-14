@@ -25,12 +25,12 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 
-// var baseUri = builder.Configuration.GetValue<string>("BaseUri");
-//
-// builder.Services.AddScoped(sp => new HttpClient
-// {
-//     BaseAddress = new Uri(baseUri)
-// });
+var baseUri = builder.Configuration.GetValue<string>("BaseUri");
+
+builder.Services.AddScoped(sp => new HttpClient
+{
+    BaseAddress = new Uri(baseUri)
+});
 
 builder.Services.AddHttpClient("ClinicScheduler").AddHttpMessageHandler<AccessTokenMessageHandler>();
 
