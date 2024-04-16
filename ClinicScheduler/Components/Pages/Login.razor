@@ -5,6 +5,8 @@
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
 @using System.Net
+@using System.Net.Http.Headers
+@using System.Text.Json
 @using Microsoft.AspNetCore.Mvc
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
@@ -56,6 +58,7 @@
             var data = await response.Content.ReadAsStringAsync();
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "token", data);
             var userInfoResponse = await Http.GetAsync("/manage/info");
+
 
             if (userInfoResponse.IsSuccessStatusCode)
             {

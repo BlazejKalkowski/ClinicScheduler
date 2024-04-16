@@ -32,7 +32,8 @@ builder.Services.AddScoped(sp => new HttpClient
     BaseAddress = new Uri(baseUri)
 });
 
-builder.Services.AddHttpClient("ClinicScheduler").AddHttpMessageHandler<AccessTokenMessageHandler>();
+
+builder.Services.AddHttpClient(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)).AddHttpMessageHandler<AccessTokenMessageHandler>();
 
 builder.Services.AddScoped<AccessTokenMessageHandler>();
 builder.Services.AddScoped<CustomAuthenticateStateProvider>();
@@ -69,8 +70,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseAntiforgery();
 app.MapRazorPages();
 app.MapIdentityApi<IdentityUser>();

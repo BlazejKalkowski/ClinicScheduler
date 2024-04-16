@@ -33,7 +33,7 @@ public class CustomAuthenticateStateProvider : AuthenticationStateProvider
     public async Task AuthenticateAsync(UserDto? user)
     {
         var json = JsonSerializer.Serialize(user);
-        await _jsRuntime.InvokeAsync<UserDto?>("localStorage.SetItem", "user",json);
+        await _jsRuntime.InvokeAsync<UserDto?>("localStorage.setItem", "user",json);
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
     
