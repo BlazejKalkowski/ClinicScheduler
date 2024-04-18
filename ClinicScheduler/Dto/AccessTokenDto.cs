@@ -4,10 +4,12 @@ namespace ClinicScheduler.Dto;
 
 public class AccessTokenDto
 {
-    [JsonPropertyName("access_token")]
+    [JsonPropertyName("accessToken")]
     public required string AccessToken { get; init; }
-    [JsonPropertyName("expires_in")]
+    [JsonPropertyName("expiresIn")]
     public required long ExpiresInSeconds { get; init; }
-    [JsonPropertyName("refresh_token")]
+    [JsonPropertyName("refreshToken")]
     public required string RefreshToken { get; init; }
+    [JsonPropertyName("tokenType")]
+    public string TokenType { get; init; }
 }

@@ -19,16 +19,6 @@
 
 <h3>Login</h3>
 
-@* <MudGrid Justify="Justify.Center">
-    <MudItem lg="3">
-        <EditForm OnInvalidSubmit="Submit" Model="_loginDto">
-            <MudTextField FullWidth="true" Label="Email" @bind-Value="_loginDto.Email"/>
-            <MudTextField FullWidth="true" InputType="InputType.Password" Label="Password" @bind-Value="_loginDto.Password" />
-            <AntiforgeryToken />
-            <MudButton ButtonType="ButtonType.Submit">Sign In</MudButton>
-        </EditForm>
-    </MudItem>
-</MudGrid> *@
 
 <form method="post" @formname="contact" @onsubmit="Submit">
     <div>
@@ -51,13 +41,18 @@
 
     private async Task Submit()
     {
-        var response = await Http.PostAsJsonAsync("/login", _loginDto);
+        var response = await Http.PostAsJsonAsync("/api/auth/login", _loginDto);
 
         if (response.IsSuccessStatusCode)
         {
             var data = await response.Content.ReadAsStringAsync();
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "token", data);
-            var userInfoResponse = await Http.GetAsync("/manage/info");
+
+            // var accessTokenDto = JsonSerializer.Deserialize<AccessTokenDto>(data);
+            // var token = accessTokenDto.AccessToken;
+            // Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
+            var userInfoResponse = await Http.GetAsync("/api/auth/manage/info");
 
 
             if (userInfoResponse.IsSuccessStatusCode)

@@ -27,13 +27,21 @@ builder.Services.AddScoped<IVisitService, VisitService>();
 
 var baseUri = builder.Configuration.GetValue<string>("BaseUri");
 
-builder.Services.AddScoped(sp => new HttpClient
-{
-    BaseAddress = new Uri(baseUri)
-});
+// builder.Services.AddScoped(sp => new HttpClient
+// {
+//     BaseAddress = new Uri(baseUri)
+// });
 
 
-builder.Services.AddHttpClient(client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)).AddHttpMessageHandler<AccessTokenMessageHandler>();
+// builder.Services.AddHttpClient("api").AddHttpMessageHandler<AccessTokenMessageHandler>();
+
+
+builder.Services.AddHttpClient("api", 
+        client => client.BaseAddress = new Uri(baseUri))
+    .AddHttpMessageHandler<AccessTokenMessageHandler>();
+
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+    .CreateClient("api"));
 
 builder.Services.AddScoped<AccessTokenMessageHandler>();
 builder.Services.AddScoped<CustomAuthenticateStateProvider>();
@@ -70,11 +78,12 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.UseAuthentication();
+
 app.UseAuthorization();
 app.UseAntiforgery();
 app.MapRazorPages();
-app.MapIdentityApi<IdentityUser>();
+app.MapGroup("api/auth")
+    .MapIdentityApi<IdentityUser>();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
