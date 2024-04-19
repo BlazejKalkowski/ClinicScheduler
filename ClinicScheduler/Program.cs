@@ -5,7 +5,7 @@ using ClinicScheduler.Middleware;
 using ClinicScheduler.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MudBlazor.Services;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +25,7 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 
-var baseUri = builder.Configuration.GetValue<string>("BaseUri");
+// var baseUri = builder.Configuration.GetValue<string>("BaseUri");
 
 // builder.Services.AddScoped(sp => new HttpClient
 // {
@@ -35,13 +35,13 @@ var baseUri = builder.Configuration.GetValue<string>("BaseUri");
 
 // builder.Services.AddHttpClient("api").AddHttpMessageHandler<AccessTokenMessageHandler>();
 
-
-builder.Services.AddHttpClient("api", 
-        client => client.BaseAddress = new Uri(baseUri))
-    .AddHttpMessageHandler<AccessTokenMessageHandler>();
-
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-    .CreateClient("api"));
+builder.Services.AddRadzenComponents();
+// builder.Services.AddHttpClient("api", 
+//         client => client.BaseAddress = new Uri(baseUri))
+//     .AddHttpMessageHandler<AccessTokenMessageHandler>();
+//
+// builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+//     .CreateClient("api"));
 
 builder.Services.AddScoped<AccessTokenMessageHandler>();
 builder.Services.AddScoped<CustomAuthenticateStateProvider>();
@@ -64,7 +64,6 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMudServices();
 
 var app = builder.Build();
 app.UseAntiforgery();
@@ -78,6 +77,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseAuthorization();
 app.UseAntiforgery();

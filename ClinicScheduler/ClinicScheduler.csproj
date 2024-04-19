@@ -12,8 +12,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.0" />
-    <PackageReference Include="MudBlazor" Version="6.19.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    <PackageReference Include="Radzen.Blazor" Version="4.29.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
