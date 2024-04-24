@@ -1,6 +1,4 @@
 
-
-
 <div align="center">
     <img src="https://github.com/BlazejKalkowski/ClinicScheduler/blob/main/ClinicSchedulerLogo.jpg?raw=true" width="400px"</img> 
 </div>
