@@ -82,6 +82,7 @@ if (!app.Environment.IsDevelopment())
 app.UseAuthorization();
 app.UseAntiforgery();
 app.MapRazorPages();
+app.UseStaticFiles();
 app.MapGroup("api/auth")
     .MapIdentityApi<IdentityUser>();
 
