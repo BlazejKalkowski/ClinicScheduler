@@ -1,8 +1,8 @@
 @page "/appointment"
 @using ClinicScheduler.Entities
 @inject DialogService DialogService
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
-<h3>AppointmentOverview</h3>
+
+<h3>Scheduler</h3>
 
 <RadzenScheduler @ref="_scheduler" SlotRender=@OnSlotRender style="height: 768px;"
                  TItem="Appointment"
@@ -44,15 +44,18 @@
         }
     }
 
-    private async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
+    async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
     {
-        if (args.View.Text != "Year" )
+
+        if (args.View.Text != "Year")
         {
-            Appointment appointment = await DialogService.OpenAsync<AddAppointment>("Add Appointment",
+            Appointment data = await DialogService.OpenAsync<AddAppointment>("Add Appointment",
                 new Dictionary<string, object> { { "Start", args.Start }, { "End", args.End } });
-            if (appointment != null)
+
+            if (data != null)
             {
-                _appointment.Add((appointment));
+                _appointment.Add(data);
+                // Either call the Reload method or reassign the Data property of the Scheduler
                 await _scheduler.Reload();
             }
         }

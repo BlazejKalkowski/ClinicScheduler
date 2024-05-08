@@ -25,6 +25,7 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 
+
 // var baseUri = builder.Configuration.GetValue<string>("BaseUri");
 
 // builder.Services.AddScoped(sp => new HttpClient
@@ -35,7 +36,7 @@ builder.Services.AddScoped<IVisitService, VisitService>();
 
 // builder.Services.AddHttpClient("api").AddHttpMessageHandler<AccessTokenMessageHandler>();
 
-builder.Services.AddRadzenComponents();
+
 // builder.Services.AddHttpClient("api", 
 //         client => client.BaseAddress = new Uri(baseUri))
 //     .AddHttpMessageHandler<AccessTokenMessageHandler>();
@@ -60,11 +61,15 @@ builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.Require
 builder.Services.AddRazorPages();
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+        .AddInteractiveServerComponents();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddRadzenComponents();
+builder.Services.AddScoped<DialogService>();
+builder.Services.AddScoped<ContextMenuService>();
+builder.Services.AddScoped<ContextMenuService>();
+builder.Services.AddScoped<TooltipService>();
 var app = builder.Build();
 app.UseAntiforgery();
 app.UseSwagger();
@@ -77,7 +82,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 
 app.UseAuthorization();
 app.UseAntiforgery();
