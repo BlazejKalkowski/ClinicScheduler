@@ -21,7 +21,7 @@ namespace ClinicScheduler.Entities
         [Required]
         public string Specialization { get; set; }
 
-        public List<Visit> Visits { get; set; } = new List<Visit>();
+        public virtual List<Visit> Visits { get; set; } = new List<Visit>();
         
     }
 }

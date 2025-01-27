@@ -1,3 +1,5 @@
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using ClinicScheduler;
 using ClinicScheduler.Components;
 using ClinicScheduler.Interfaces;
@@ -5,6 +7,7 @@ using ClinicScheduler.Middleware;
 using ClinicScheduler.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +19,7 @@ IConfigurationRoot configuration = new ConfigurationBuilder()
 
 builder.Services.AddServerSideBlazor().AddCircuitOptions(o =>
 {
-    if (builder.Environment.IsDevelopment()) //only add details when debugging
+    if (builder.Environment.IsDevelopment())
     {
         o.DetailedErrors = true;
     }
@@ -26,33 +29,21 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 
 
-// var baseUri = builder.Configuration.GetValue<string>("BaseUri");
-
-// builder.Services.AddScoped(sp => new HttpClient
-// {
-//     BaseAddress = new Uri(baseUri)
-// });
-
-
-// builder.Services.AddHttpClient("api").AddHttpMessageHandler<AccessTokenMessageHandler>();
-
-
-// builder.Services.AddHttpClient("api", 
-//         client => client.BaseAddress = new Uri(baseUri))
-//     .AddHttpMessageHandler<AccessTokenMessageHandler>();
-//
-// builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-//     .CreateClient("api"));
-
 builder.Services.AddScoped<AccessTokenMessageHandler>();
 builder.Services.AddScoped<CustomAuthenticateStateProvider>();
 
 builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
-var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+
+
+builder.Configuration.AddAzureKeyVault($"https://{builder.Configuration["ClinicDBKey"]}.vault.azure.net/", new DefaultKeyVaultSecretManager());
+
+var client = new SecretClient(new Uri($"https://{builder.Configuration["ClinicDBKey"]}.vault.azure.net/"), new DefaultAzureCredential());
+
 builder.Services.AddDbContext<ClinicDbContext>(options =>
 {
-    options.UseNpgsql(connectionString);
+    options.UseSqlServer(client.GetSecret("DbKey").Value.Value.ToString());
 });
 
 builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)

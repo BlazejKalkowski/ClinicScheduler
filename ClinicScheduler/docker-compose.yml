@@ -22,20 +22,20 @@ services:
     networks:
       - dev
   
-  clinicdb: 
-    image: postgres:latest
-    container_name: clinicdb
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: ClinicDb
-      POSTGRES_PASSWORD: ClinicDb123
-    ports:
-      - "5433:5432"
-    restart: always
-    volumes:
-      - app_data:/var/lib/postgresql
-    networks:
-      - dev
+  # clinicdb: 
+  #   image: postgres:latest
+  #   container_name: clinicdb
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_DB: ClinicDb
+  #     POSTGRES_PASSWORD: ClinicDb123
+  #   ports:
+  #     - "5433:5432"
+  #   restart: always
+  #   volumes:
+  #     - app_data:/var/lib/postgresql
+  #   networks:
+  #     - dev
 
 volumes: 
   app_data:
