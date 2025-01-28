@@ -29,26 +29,24 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IVisitService, VisitService>();
 
 
-builder.Services.AddScoped<AccessTokenMessageHandler>();
-builder.Services.AddScoped<CustomAuthenticateStateProvider>();
+//builder.Services.AddScoped<AccessTokenMessageHandler>();
+//builder.Services.AddScoped<CustomAuthenticateStateProvider>();
 
-builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
-builder.Services.AddAuthorizationBuilder();
+//builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+//builder.Services.AddAuthorizationBuilder();
 
 
 
 builder.Configuration.AddAzureKeyVault($"https://{builder.Configuration["ClinicDBKey"]}.vault.azure.net/", new DefaultKeyVaultSecretManager());
 
-var client = new SecretClient(new Uri($"https://{builder.Configuration["ClinicDBKey"]}.vault.azure.net/"), new DefaultAzureCredential());
-
 builder.Services.AddDbContext<ClinicDbContext>(options =>
 {
-    options.UseSqlServer(client.GetSecret("DbKey").Value.Value.ToString());
+    options.UseSqlServer(builder.Configuration["DbKey"]);
 });
 
-builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-        .AddEntityFrameworkStores<ClinicDbContext>()
-        .AddApiEndpoints();
+//builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+//        .AddEntityFrameworkStores<ClinicDbContext>()
+//        .AddApiEndpoints();
 builder.Services.AddRazorPages();
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -78,8 +76,8 @@ app.UseAuthorization();
 app.UseAntiforgery();
 app.MapRazorPages();
 app.UseStaticFiles();
-app.MapGroup("api/auth")
-    .MapIdentityApi<IdentityUser>();
+//app.MapGroup("api/auth")
+//    .MapIdentityApi<IdentityUser>();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
